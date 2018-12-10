@@ -1,24 +1,40 @@
 <template>
   <div class="home">
-    <input type="text" placeholder="search">
+    <p>{{message}}</p>
+    <input v-model.lazy="message" type="text" placeholder="search">
 
-    <p>{{ location }}</p>
+    <h3>{{weather.title}}</h3>
+    <ul>
+      <li v-for="(date, i) in weather.days" :key="`index-${i}`">
+        <card-weather :data="date"/>
+      </li>
+    </ul>
 
-    <p> блок с кратким прогнозом в текущем месте.</p>
   </div>
 </template>
 
 <script>
   // @ is an alias to /src
   import { mapState } from 'vuex';
+  import CardWeather from '@/components/CardWeather';
 
   export default {
     name: 'home',
 
-    components: {},
+    components: {
+      CardWeather
+    },
+
+    data() {
+      return {
+        message: ''
+      }
+    },
 
     computed: mapState([
-      'location'
+      'location',
+      'nearestCities',
+      'weather'
     ]),
 
     created() {
