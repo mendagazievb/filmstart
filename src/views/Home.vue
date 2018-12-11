@@ -1,11 +1,16 @@
 <template>
   <div class="home">
-    <input v-model.lazy="message" @change="searchQueryForCities(message)" type="text" placeholder="search">
+    <input
+        v-model.lazy="message"
+        @change="searchQueryForCities(message)"
+        type="text"
+        placeholder="search"
+    >
 
     <ul>
-      <li v-for="(item, i) in results">
+      <li v-for="(item, i) in searchQueryResults">
         <router-link
-            :to="{ name: 'details', params: { woeid: item.woeid } }"
+            :to="{ name: 'v-weather', params: { woeid: item.woeid } }"
         >
           {{ item.title }}
         </router-link>
@@ -14,7 +19,7 @@
     </ul>
 
 
-    <h3>{{weather.title}}</h3>
+    <h3>{{ weather.title }}</h3>
 
     <ul>
       <li v-for="(date, i) in weather.days" :key="`index-${i}`">
@@ -47,7 +52,7 @@
       'location',
       'nearestCities',
       'weather',
-      'results'
+      'searchQueryResults'
     ]),
 
     created() {

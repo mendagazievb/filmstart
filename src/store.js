@@ -15,8 +15,11 @@ export default new Vuex.Store({
       woeid: '',
       days: []
     },
-    results: []
+
+    searchQueryResults: []
   },
+
+
 
   mutations: {
     saveLocation(state, payload) {
@@ -34,7 +37,7 @@ export default new Vuex.Store({
     },
 
     saveSearchQueryResult(state, result) {
-      state.results = result;
+      state.searchQueryResults = result;
     }
   },
 
@@ -73,13 +76,14 @@ export default new Vuex.Store({
         .then(response => commit('saveSearchQueryResult', response));
     },
 
-    getWeather({ commit, state }, { woeid, date }) {
+    getDataForWeather({ commit, state }, { woeid, date }) {
       let hasWoeid = woeid ? `${woeid}/` : '';
       let hasDate = date ? `${date}/` : '';
 
       fetch(`${METAWEATHER_API}${hasWoeid}${hasDate}`)
         .then(response => response.json())
         .then(response => {
+          if (hasDate && hasWoeid) return;
           commit('saveWeather', response)
         });
     },
@@ -92,7 +96,7 @@ export default new Vuex.Store({
 
       let { woeid } = state.nearestCities[0]; // Получаем ближайший город в списке
 
-      dispatch('getWeather', { woeid })
+      dispatch('getDataForWeather', { woeid })
 
 
     },

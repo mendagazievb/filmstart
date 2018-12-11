@@ -1,7 +1,7 @@
 <template>
-  <section v-if="Object.keys(data)">
+  <section v-if="Object.keys(data).length">
     <h1>
-      <router-link :to="{ path: 'details', params: { woeid, date: data.applicable_date } }">
+      <router-link :to="{ path: `/weather/${woeid}/${data.applicable_date}` } ">
         {{ data.applicable_date }}
       </router-link>
     </h1>
@@ -27,7 +27,9 @@
         type: Object,
         default: () => ({})
       },
-      woeid: Number
+      woeid: {
+        type: [String, Number]
+      }
     },
 
     computed: {

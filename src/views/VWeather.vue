@@ -1,14 +1,20 @@
 <template>
   <div>
-    <p>{{ $route.params.woeid }}</p>
-
     <h3>{{ weather.title }}</h3>
 
-    <ul>
+    <div v-if="$route.params.date">
+      <card-weather :data="getFilterData" :woeid="weather.woeid" />
+    </div>
+
+    <ul v-else>
       <li v-for="(date, i) in weather.days" :key="`index-${i}`">
         <card-weather :data="date" :woeid="weather.woeid" />
       </li>
     </ul>
+
+    <router-view></router-view>
+
+
   </div>
 </template>
 
@@ -17,7 +23,7 @@
   import CardWeather from '@/components/CardWeather';
 
   export default {
-    name: 'v-details',
+    name: 'v-weather',
 
     components: {
       CardWeather
@@ -27,20 +33,20 @@
       ...mapState([
         'weather',
       ]),
+
+      getFilterData() {
+        return this.weather.days.find(prop => prop.applicable_date === this.$route.params.date)
+      }
     },
 
     created() {
-      this.getWeather({ woeid: this.$route.params.woeid });
+      this.getDataForWeather({ woeid: this.$route.params.woeid });
     },
 
     methods: {
       ...mapActions([
-        'getWeather',
+        'getDataForWeather',
       ]),
     },
   };
 </script>
-
-<style scoped>
-
-</style>

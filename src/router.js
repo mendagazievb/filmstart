@@ -6,7 +6,9 @@ Vue.use(Router);
 
 export default new Router({
   mode: 'history',
+
   base: process.env.BASE_URL,
+
   routes: [
     {
       path: '/',
@@ -15,20 +17,21 @@ export default new Router({
     },
     {
       path: '/map',
-      name: 'map',
-      component: () => import(/* webpackChunkName: "map" */ './views/Map.vue'),
+      name: 'v-map',
+      component: () => import(/* webpackChunkName: "map" */ './views/VMap.vue'),
     },
     {
-      path: '/details/:woeid',
-      name: 'details',
-      component: () => import(/* webpackChunkName: "details" */ './views/VDetails.vue'),
+      path: '/weather/:woeid',
+      name: 'v-weather',
+      component: () => import(/* webpackChunkName: "v-weather" */ './views/VWeather.vue'),
       children: [
         {
           path: ':date',
-          name: 'detailsChild',
-          component: () => import(/* webpackChunkName: "detailsChild" */ './views/VDetailsChild.vue'),
+          name: 'v-weather-details',
+          component: () => import(/* webpackChunkName: "v-weather-details" */ './views/VWeatherDetails.vue')
         }
       ]
     },
+
   ],
 });
