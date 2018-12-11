@@ -9,6 +9,7 @@ const IP_API = 'https://ipapi.co/json/';
 export default new Vuex.Store({
   state: {
     location: {},
+    coords: [],
     nearestCities: [],
     weather: {
       title: '',
@@ -25,6 +26,8 @@ export default new Vuex.Store({
     },
 
     saveNearestCities(state, payload) {
+      // Добавляем координаты ближайшего города
+      state.coords = payload[0]['latt_long'].split(',').map(item => Number(item));
       state.nearestCities = payload;
     },
 

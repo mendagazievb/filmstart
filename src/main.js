@@ -3,7 +3,9 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import VueHighcharts from 'vue-highcharts';
+import YmapPlugin from 'vue-yandex-maps'
 
+Vue.use(YmapPlugin);
 Vue.use(VueHighcharts);
 
 Vue.config.productionTip = false;
