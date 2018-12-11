@@ -1,6 +1,10 @@
 <template>
   <section v-if="Object.keys(data)">
-    <h1><a href="#">{{ data.applicable_date }}</a></h1>
+    <h1>
+      <router-link :to="{ path: 'details', params: { woeid, date: data.applicable_date } }">
+        {{ data.applicable_date }}
+      </router-link>
+    </h1>
 
     <img
         :src="`https://www.metaweather.com/static/img/weather/${data.weather_state_abbr}.svg`"
@@ -19,8 +23,11 @@
 <script>
   export default {
     props: {
-      data: Object,
-      default: () => ({})
+      data: {
+        type: Object,
+        default: () => ({})
+      },
+      woeid: Number
     },
 
     computed: {

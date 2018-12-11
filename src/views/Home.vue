@@ -1,12 +1,24 @@
 <template>
   <div class="home">
-    <p>{{message}}</p>
-    <input v-model.lazy="message" type="text" placeholder="search">
+    <input v-model.lazy="message" @change="searchQueryForCities(message)" type="text" placeholder="search">
+
+    <ul>
+      <li v-for="(item, i) in results">
+        <router-link
+            :to="{ name: 'details', params: { woeid: item.woeid } }"
+        >
+          {{ item.title }}
+        </router-link>
+      </li>
+
+    </ul>
+
 
     <h3>{{weather.title}}</h3>
+
     <ul>
       <li v-for="(date, i) in weather.days" :key="`index-${i}`">
-        <card-weather :data="date"/>
+        <card-weather :data="date" :woeid="weather.woeid" />
       </li>
     </ul>
 
@@ -15,7 +27,7 @@
 
 <script>
   // @ is an alias to /src
-  import { mapState } from 'vuex';
+  import { mapState, mapActions } from 'vuex';
   import CardWeather from '@/components/CardWeather';
 
   export default {
@@ -34,11 +46,18 @@
     computed: mapState([
       'location',
       'nearestCities',
-      'weather'
+      'weather',
+      'results'
     ]),
 
     created() {
       this.$store.dispatch('loadDefaultData');
+    },
+
+    methods: {
+      ...mapActions([
+        'searchQueryForCities'
+      ])
     }
   };
 </script>

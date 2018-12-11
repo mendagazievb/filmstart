@@ -19,9 +19,16 @@ export default new Router({
       component: () => import(/* webpackChunkName: "map" */ './views/Map.vue'),
     },
     {
-      path: '/details',
+      path: '/details/:woeid',
       name: 'details',
-      component: () => import(/* webpackChunkName: "details" */ './views/Details.vue'),
+      component: () => import(/* webpackChunkName: "details" */ './views/VDetails.vue'),
+      children: [
+        {
+          path: ':date',
+          name: 'detailsChild',
+          component: () => import(/* webpackChunkName: "detailsChild" */ './views/VDetailsChild.vue'),
+        }
+      ]
     },
   ],
 });

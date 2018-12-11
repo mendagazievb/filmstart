@@ -12,8 +12,10 @@ export default new Vuex.Store({
     nearestCities: [],
     weather: {
       title: '',
+      woeid: '',
       days: []
-    }
+    },
+    results: []
   },
 
   mutations: {
@@ -27,7 +29,12 @@ export default new Vuex.Store({
 
     saveWeather(state, payload) {
       state.weather.title = payload.title;
+      state.weather.woeid = payload.woeid;
       state.weather.days = payload.consolidated_weather;
+    },
+
+    saveSearchQueryResult(state, result) {
+      state.results = result;
     }
   },
 
@@ -58,6 +65,12 @@ export default new Vuex.Store({
       return fetch(`${METAWEATHER_API}search/?lattlong=${latitude},${longitude}`)
         .then(response => response.json())
         .then(response => commit('saveNearestCities', response));
+    },
+
+    searchQueryForCities({ commit, state }, searchQuery) {
+      fetch(`${METAWEATHER_API}search/?query=${searchQuery}`)
+        .then(response => response.json())
+        .then(response => commit('saveSearchQueryResult', response));
     },
 
     getWeather({ commit, state }, { woeid, date }) {
