@@ -15,11 +15,9 @@ export default new Vuex.Store({
       woeid: '',
       days: []
     },
-
-    searchQueryResults: []
+    searchQueryResults: [],
+    historyWeather: []
   },
-
-
 
   mutations: {
     saveLocation(state, payload) {
@@ -38,6 +36,10 @@ export default new Vuex.Store({
 
     saveSearchQueryResult(state, result) {
       state.searchQueryResults = result;
+    },
+
+    saveHistoryWeather(state, history) {
+      state.historyWeather = history;
     }
   },
 
@@ -83,7 +85,11 @@ export default new Vuex.Store({
       fetch(`${METAWEATHER_API}${hasWoeid}${hasDate}`)
         .then(response => response.json())
         .then(response => {
-          if (hasDate && hasWoeid) return;
+          if (hasDate && hasWoeid) {
+            commit('saveHistoryWeather', response);
+            return;
+          }
+
           commit('saveWeather', response)
         });
     },

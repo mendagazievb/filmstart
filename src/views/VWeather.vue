@@ -12,8 +12,7 @@
       </li>
     </ul>
 
-    <router-view></router-view>
-
+    <router-view/>
 
   </div>
 </template>
@@ -34,6 +33,11 @@
         'weather',
       ]),
 
+      /**
+       * Получаем из списка данных с погодой переданную дату
+       *
+       * @returns {object}
+       */
       getFilterData() {
         return this.weather.days.find(prop => prop.applicable_date === this.$route.params.date)
       }
