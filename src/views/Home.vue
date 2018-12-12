@@ -1,28 +1,9 @@
 <template>
   <div class="home">
-    <input
-        v-model.lazy="message"
-        @change="searchQueryForCities(message)"
-        type="text"
-        placeholder="search"
-    >
+    <h3 class="title home__title">{{ weather.title }}</h3>
 
-    <ul>
-      <li v-for="(item, i) in searchQueryResults">
-        <router-link
-            :to="{ name: 'v-weather', params: { woeid: item.woeid } }"
-        >
-          {{ item.title }}
-        </router-link>
-      </li>
-
-    </ul>
-
-
-    <h3>{{ weather.title }}</h3>
-
-    <ul>
-      <li v-for="(date, i) in weather.days" :key="`index-${i}`">
+    <ul class="list">
+      <li class="list__item" v-for="(date, i) in weather.days" :key="`index-${i}`">
         <card-weather :data="date" :woeid="weather.woeid" />
       </li>
     </ul>
@@ -38,31 +19,26 @@
   export default {
     name: 'home',
 
-    components: {
-      CardWeather
-    },
-
-    data() {
-      return {
-        message: ''
-      }
-    },
+    components: { CardWeather },
 
     computed: mapState([
       'location',
       'nearestCities',
       'weather',
-      'searchQueryResults'
     ]),
 
     created() {
       this.$store.dispatch('loadDefaultData');
-    },
-
-    methods: {
-      ...mapActions([
-        'searchQueryForCities'
-      ])
     }
   };
 </script>
+
+<style>
+  .home {
+    text-align: center;
+  }
+
+  .home__title {
+    font-size: 1.4rem;
+  }
+</style>

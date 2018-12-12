@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <h3>{{ weather.title }}</h3>
+  <div class="weather">
+    <h3 class="title weather__title">{{ weather.title }}</h3>
 
-    <div v-if="$route.params.date">
+    <div v-if="$route.params.date" class="weather__card">
       <card-weather :data="getFilterData" :woeid="weather.woeid" />
     </div>
 
-    <ul v-else>
-      <li v-for="(date, i) in weather.days" :key="`index-${i}`">
+    <ul v-else class="list">
+      <li v-for="(date, i) in weather.days" :key="`index-${i}`" class="list__item">
         <card-weather :data="date" :woeid="weather.woeid" />
       </li>
     </ul>
@@ -54,3 +54,10 @@
     },
   };
 </script>
+
+<style>
+  .weather__card {
+    margin-bottom: 1rem;
+  }
+</style>
+

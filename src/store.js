@@ -17,7 +17,8 @@ export default new Vuex.Store({
       days: []
     },
     searchQueryResults: [],
-    historyWeather: []
+    historyWeather: [],
+    isLoading: false
   },
 
   mutations: {
@@ -43,6 +44,10 @@ export default new Vuex.Store({
 
     saveHistoryWeather(state, history) {
       state.historyWeather = history;
+    },
+
+    toggleLoading(state, isLoading) {
+      state.isLoading = isLoading;
     }
   },
 
@@ -75,19 +80,38 @@ export default new Vuex.Store({
         .then(response => commit('saveNearestCities', response));
     },
 
+    /**
+     * Поиск городов
+     *
+     * @param commit
+     * @param state
+     * @param {string} searchQuery - поисковый запрос
+     * @returns {Promise<any | never>}
+     */
     searchQueryForCities({ commit, state }, searchQuery) {
-      fetch(`${METAWEATHER_API}search/?query=${searchQuery}`)
+      return fetch(`${METAWEATHER_API}search/?query=${searchQuery ? searchQuery : JSON.stringify('')}`)
         .then(response => response.json())
         .then(response => commit('saveSearchQueryResult', response));
     },
 
+    /**
+     * Получаем данные для погоды
+     *
+     * @param commit
+     * @param state
+     * @param {number} woeid - id города
+     * @param {string} date - дата
+     */
     getDataForWeather({ commit, state }, { woeid, date }) {
+      commit('toggleLoading', true);
       let hasWoeid = woeid ? `${woeid}/` : '';
       let hasDate = date ? `${date}/` : '';
 
       fetch(`${METAWEATHER_API}${hasWoeid}${hasDate}`)
         .then(response => response.json())
         .then(response => {
+          commit('toggleLoading', false);
+
           if (hasDate && hasWoeid) {
             commit('saveHistoryWeather', response);
             return;
@@ -97,7 +121,16 @@ export default new Vuex.Store({
         });
     },
 
+    /**
+     * Выполняем загрузку для начальной страницы, с учетом ip адреса
+     *
+     * @param commit
+     * @param dispatch
+     * @param state
+     * @returns {Promise<void>}
+     */
     async loadDefaultData({ commit, dispatch, state }) {
+      commit('toggleLoading', true);
       // Долгое ожидание, так как запросы отправляются последовательно и зависят друг от друга
       await dispatch('getLocation');
 
@@ -105,9 +138,7 @@ export default new Vuex.Store({
 
       let { woeid } = state.nearestCities[0]; // Получаем ближайший город в списке
 
-      dispatch('getDataForWeather', { woeid })
-
-
+      dispatch('getDataForWeather', { woeid });
     },
   },
 });

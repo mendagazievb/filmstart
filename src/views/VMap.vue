@@ -4,6 +4,7 @@
         :coords="coords"
         zoom="4"
         style="width: 100%; height: 600px;"
+        @map-was-initialized="initHandler"
     >
       <ymap-marker
           v-for="(city, i) in nearestCities"
@@ -25,27 +26,32 @@
 
   export default {
     data() {
-      return {
-      }
+      return {};
     },
 
     computed: {
       ...mapState([
         'nearestCities',
-        'coords'
-      ])
+        'coords',
+      ]),
     },
 
     created() {
       if (!this.coords.length) {
-        this.loadDefaultData()
+        this.loadDefaultData();
+      } else {
+        this.$store.commit('toggleLoading', true);
       }
     },
 
     methods: {
       ...mapActions([
-        'loadDefaultData'
-      ])
-    }
-  }
+        'loadDefaultData',
+      ]),
+
+      initHandler() {
+        this.$store.commit('toggleLoading', false);
+      },
+    },
+  };
 </script>
