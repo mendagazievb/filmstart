@@ -71,6 +71,7 @@
     padding: 1rem;
     border: 1px solid #ccc;
     border-radius: 6px;
+    text-align: center;
   }
 
   .card__title {

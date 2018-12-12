@@ -6,6 +6,14 @@ Vue.use(Vuex);
 const METAWEATHER_API = 'https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/';
 const IP_API = 'https://ipapi.co/json/';
 
+const handleErrors = (response) => {
+  if (!response.ok) {
+    throw Error(response.statusText);
+  }
+
+  return response.json();
+};
+
 export default new Vuex.Store({
   state: {
     location: {},
@@ -60,10 +68,11 @@ export default new Vuex.Store({
      */
     getLocation({ commit }, payload) {
       return fetch(IP_API)
-        .then(response => response.json())
+        .then(handleErrors)
         .then(response => {
           commit('saveLocation', response);
-        });
+        })
+        .catch(error => console.error(error))
     },
 
     /**
@@ -76,8 +85,9 @@ export default new Vuex.Store({
       let { latitude, longitude } = state.location;
 
       return fetch(`${METAWEATHER_API}search/?lattlong=${latitude},${longitude}`)
-        .then(response => response.json())
-        .then(response => commit('saveNearestCities', response));
+        .then(handleErrors)
+        .then(response => commit('saveNearestCities', response))
+        .catch(error => console.error(error))
     },
 
     /**
@@ -90,8 +100,9 @@ export default new Vuex.Store({
      */
     searchQueryForCities({ commit, state }, searchQuery) {
       return fetch(`${METAWEATHER_API}search/?query=${searchQuery ? searchQuery : JSON.stringify('')}`)
-        .then(response => response.json())
-        .then(response => commit('saveSearchQueryResult', response));
+        .then(handleErrors)
+        .then(response => commit('saveSearchQueryResult', response))
+        .catch(error => console.error(error))
     },
 
     /**
@@ -108,7 +119,7 @@ export default new Vuex.Store({
       let hasDate = date ? `${date}/` : '';
 
       fetch(`${METAWEATHER_API}${hasWoeid}${hasDate}`)
-        .then(response => response.json())
+        .then(handleErrors)
         .then(response => {
           commit('toggleLoading', false);
 
@@ -118,7 +129,8 @@ export default new Vuex.Store({
           }
 
           commit('saveWeather', response)
-        });
+        })
+        .catch(error => console.error(error))
     },
 
     /**
