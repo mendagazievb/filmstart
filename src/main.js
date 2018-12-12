@@ -7,6 +7,7 @@ import YmapPlugin from 'vue-yandex-maps';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSpinner, faCog } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import 'whatwg-fetch';
 
 Vue.use(YmapPlugin);
 Vue.use(VueHighcharts);

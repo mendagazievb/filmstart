@@ -1,5 +1,9 @@
 # filmstart
 
+[demo](https://mendagazievb.github.io/filmstart/)
+
+![alt-text](screen.png)
+
 ## Project setup
 ```
 npm install
